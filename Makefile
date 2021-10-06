@@ -1,4 +1,3 @@
-.PHONY: clean, mrproper
 
 CC = gcc
 CFLAGS = -g -Wall -Wextra -std=c99 -pedantic -Wwrite-strings
