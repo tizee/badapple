@@ -112,21 +112,22 @@ void ba_time_counter() {
   double diff = difftime(current, start);
   int len = digits(diff);
   printf("\x1b[%d;%dH",term_h-1,term_w/2-len/2-12);
-  printf("\033[1;30mRunning for %0.0f seconds\033[J\033[0m", diff);
+  printf("\x1b[1;30mRunning for %0.0f seconds\x1b[J\x1b[0m", diff);
 }
 
 // play frames
 void play() {
   init_fps_timer();
+  // save cursor and termianl info
   printf("\x1b[?25l");
   printf("\x1b[?47h");
 
   int current_frame = 0;
   while (playing) {
     if (clear_screen) {
-      printf("\033[H");
+      printf("\x1b[H");
     } else {
-      printf("\033[u");
+      printf("\x1b[u");
     }
     for (int y = min_row; y < max_row; ++y) {
       if (y < 0) {
@@ -168,13 +169,11 @@ int main(int argc, char *argv[]) {
   time(&start);
 
   get_terminal_size();
-  printf("%d %d\n", term_h, term_w);
   min_col = (term_w - FRAME_WIDTH) / 2;
   max_col = (term_w + FRAME_WIDTH) / 2;
 
   min_row = (term_h - FRAME_HEIGHT) / 2;
   max_row = (term_h + FRAME_HEIGHT) / 2;
-  /* Accept ^C -> restore cursor */
   signal(SIGINT, SIGINT_handler);
   signal(SIGWINCH, SIGWINCH_handler);
   play();
