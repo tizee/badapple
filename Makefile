@@ -18,6 +18,6 @@ mrproper: clean
 	rm -f badapple
 
 install: all
-	install src/badapple /usr/local/bin/${package}
+	install badapple /usr/local/bin/${package}
 
 .PHONY: all mrproper clean
