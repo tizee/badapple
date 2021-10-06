@@ -89,6 +89,7 @@ void SIGWINCH_handler(int sig) {
 
   min_row = (term_h - FRAME_HEIGHT) / 2;
   max_row = (term_h + FRAME_HEIGHT) / 2;
+  clearn_entire_screen();
 
   signal(SIGWINCH, SIGWINCH_handler);
 }
@@ -110,11 +111,7 @@ void ba_time_counter() {
   time(&current);
   double diff = difftime(current, start);
   int len = digits(diff);
-  int width = (term_w - len) / 2;
-  while (width > 0) {
-    printf(" ");
-    width--;
-  }
+  printf("\x1b[%d;%dH",term_h-1,term_w/2-len/2-12);
   printf("\033[1;30mRunning for %0.0f seconds\033[J\033[0m", diff);
 }
 
@@ -145,6 +142,7 @@ void play() {
         if (x >= term_w - 1) {
           break;
         }
+        printf("\x1b[%d;%dH",y,x);
         char ch = frames[current_frame][y-min_row][x-min_col];
         if (ch != ' ') {
           printf("%s%c",black_fg,ch);
@@ -178,6 +176,7 @@ int main(int argc, char *argv[]) {
   max_row = (term_h + FRAME_HEIGHT) / 2;
   /* Accept ^C -> restore cursor */
   signal(SIGINT, SIGINT_handler);
+  signal(SIGWINCH, SIGWINCH_handler);
   play();
   return 0;
 }

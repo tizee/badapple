@@ -2,9 +2,9 @@
 #define BADAPPLE_TERM_CONTROL
 
 // clear entire screen
-void reset_mode()
+void clearn_entire_screen()
 {
-  printf("\033[0m");
+  printf("\x1b[2J");
 }
 
 // restore terminal
